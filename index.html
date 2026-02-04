@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toots, be my Valentine? 💖</title>
+    <title>Be My Valentine? 💖</title>
     <style>
         body {
             margin: 0;
@@ -35,7 +35,10 @@
         h1 {
             color: #d63384;
             font-size: 24px;
-            min-height: 60px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .buttons {
@@ -58,6 +61,7 @@
         #yesBtn {
             background-color: #4CAF50;
             color: white;
+            z-index: 20;
         }
 
         #noBtn {
@@ -84,7 +88,7 @@
 
     <div class="container">
         <div class="teddy">🧸❤️</div>
-        <h1 id="message">Will you be my valentine, Toots?</h1>
+        <h1 id="message">Will you be my valentine?</h1>
         <div class="buttons" id="btnGroup">
             <button id="yesBtn" onclick="accept()">Yes</button>
             <button id="noBtn" onclick="reject()">No</button>
@@ -95,7 +99,7 @@
         let clickCount = 0;
         const messages = [
             "Are you sure?",
-            "Mahal please",
+            "Please?",
             "Don't do this to me"
         ];
 
@@ -108,17 +112,19 @@
                 // Change text
                 msg.innerText = messages[clickCount];
                 
-                // Make Yes button bigger
-                let currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
-                yesBtn.style.fontSize = (currentSize + 30) + "px";
-                yesBtn.style.padding = (parseInt(yesBtn.style.padding || 12) + 10) + "px " + (parseInt(yesBtn.style.paddingLeft || 25) + 20) + "px";
+                // Make Yes button much bigger each time
+                let currentFontSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+                yesBtn.style.fontSize = (currentFontSize + 35) + "px";
                 
-                // Optional: Make No button slightly smaller
-                noBtn.style.transform = `scale(${1 - (clickCount * 0.15)})`;
+                let currentPadding = parseInt(window.getComputedStyle(yesBtn).padding);
+                yesBtn.style.padding = (currentPadding + 15) + "px " + (currentPadding * 2) + "px";
+                
+                // Make No button slightly smaller
+                noBtn.style.transform = `scale(${1 - (clickCount * 0.2)})`;
                 
                 clickCount++;
             } else {
-                // Final stage: No disappears
+                // Final stage: No button disappears
                 noBtn.style.display = 'none';
             }
         }
@@ -137,7 +143,8 @@
                 heart.className = 'heart';
                 heart.innerHTML = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                // Mixed sizes: some ~20px, some ~10px
+                heart.style.fontSize = Math.random() > 0.5 ? '20px' : '10px';
                 heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
                 container.appendChild(heart);
                 setTimeout(() => heart.remove(), 5000);
