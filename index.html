@@ -1,178 +1,135 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Will You Be My Valentine?</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: pink;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-  }
+  <meta charset="UTF-8">
+  <title>Be My Valentine 💘</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  h1 {
-    font-size: 25rem; /* huge 25-inch-like letters */
-    color: red;
-    text-align: center;
-    margin: 0;
-  }
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 2;
+    }
 
-  #teddy {
-    position: relative;
-    width: 200px;
-    margin-top: -50px;
-  }
+    h1 {
+      color: #ff4d6d;
+      margin-bottom: 25px;
+    }
 
-  #teddy img {
-    width: 100%;
-  }
+    button {
+      font-size: 18px;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s;
+    }
 
-  #heart-text {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: center;
-  }
+    #yesBtn {
+      background-color: #ff4d6d;
+      color: white;
+      margin-right: 10px;
+    }
 
-  #buttons {
-    margin-top: 20px;
-    position: relative;
-  }
+    #noBtn {
+      background-color: #ccc;
+      color: #333;
+      position: absolute;
+    }
 
-  button {
-    padding: 15px 25px;
-    margin: 10px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-  }
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+    }
 
-  #yes {
-    background-color: red;
-    color: white;
-  }
-
-  #no {
-    background-color: gray;
-    color: white;
-    position: absolute;
-  }
-
-  /* Floating hearts animation */
-  .heart {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background: red;
-    clip-path: polygon(50% 0%, 61% 13%, 75% 13%, 84% 25%, 84% 37%, 75% 50%, 50% 75%, 25% 50%, 16% 37%, 16% 25%, 25% 13%, 39% 13%);
-    animation: floatUp linear infinite;
-  }
-
-  @keyframes floatUp {
-    0% { transform: translateY(100vh) scale(1); opacity:1; }
-    100% { transform: translateY(-100px) scale(0.5); opacity:0; }
-  }
-
-  /* Rose explosion */
-  .rose {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    border-radius: 50%;
-    animation: explode 1s forwards;
-  }
-
-  @keyframes explode {
-    0% { transform: scale(0); opacity:1; }
-    100% { transform: translate(var(--x), var(--y)) scale(1); opacity:0; }
-  }
-</style>
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<h1>💌</h1>
-<div id="teddy">
-  <img src="https://i.imgur.com/3v4Zp7b.png" alt="Teddy Bear Holding Heart">
-  <div id="heart-text">Will you be my Valentine, Toots?</div>
-</div>
+  <div class="card">
+    <h1>Will you be my Valentine? 💖</h1>
+    <button id="yesBtn" onclick="yesClick()">Yes 💘</button>
+    <button id="noBtn" onmouseover="moveNo()">No 💔</button>
+  </div>
 
-<div id="buttons">
-  <button id="yes">Yes</button>
-  <button id="no">No</button>
-</div>
+  <script>
+    let yesScale = 1;
+    let dodgeCount = 0;
 
-<script>
-  const noBtn = document.getElementById('no');
-  const yesBtn = document.getElementById('yes');
-  const body = document.body;
+    function moveNo() {
+      dodgeCount++;
 
-  // Initialize No button position
-  noBtn.style.top = '0px';
-  noBtn.style.left = '200px';
+      const noBtn = document.getElementById("noBtn");
+      const yesBtn = document.getElementById("yesBtn");
 
-  // Make hearts float
-  function createHeart() {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.animationDuration = (3 + Math.random() * 3) + 's';
-    body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }
-  setInterval(createHeart, 300);
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
 
-  // Dodge "No" button
-  noBtn.addEventListener('mouseenter', () => {
-    const yesRect = yesBtn.getBoundingClientRect();
-    let newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    let newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
 
-    // Make No disappear if Yes overlaps
-    const yesWidth = yesBtn.offsetWidth;
-    const yesHeight = yesBtn.offsetHeight;
+      // Make YES bigger
+      yesScale += 0.2;
+      yesBtn.style.transform = `scale(${yesScale})`;
 
-    while (
-      newX < yesRect.right && newX + noBtn.offsetWidth > yesRect.left &&
-      newY < yesRect.bottom && newY + noBtn.offsetHeight > yesRect.top
-    ) {
-      newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-      newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-      // Also increase Yes size
-      yesBtn.style.transform = `scale(${1 + Math.random() * 1})`;
+      // Remove NO after dodging too much
+      if (dodgeCount >= 6) {
+        noBtn.style.display = "none";
+      }
     }
 
-    noBtn.style.left = newX + 'px';
-    noBtn.style.top = newY + 'px';
-  });
-
-  // Yes click explosion
-  yesBtn.addEventListener('click', () => {
-    for(let i=0;i<50;i++){
-      const rose = document.createElement('div');
-      rose.classList.add('rose');
-      rose.style.left = yesBtn.offsetLeft + yesBtn.offsetWidth/2 + 'px';
-      rose.style.top = yesBtn.offsetTop + yesBtn.offsetHeight/2 + 'px';
-      rose.style.setProperty('--x', (Math.random()-0.5)*500 + 'px');
-      rose.style.setProperty('--y', (Math.random()-0.5)*500 + 'px');
-      body.appendChild(rose);
-      setTimeout(() => rose.remove(), 1000);
+    function yesClick() {
+      document.body.innerHTML = `
+        <h1 style="color:#ff4d6d;text-align:center;">
+          YAYYY 💕<br>
+          You’re my Valentine 😍💘
+        </h1>
+      `;
     }
-  });
-</script>
+
+    // Floating hearts generator
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = ["💖","💘","💕","💞","❤️"][Math.floor(Math.random()*5)];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 15 + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 6000);
+    }, 300);
+  </script>
 
 </body>
 </html>
