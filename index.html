@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine? 💖</title>
+    <title>Toots, be my Valentine? 💖</title>
     <style>
         body {
             margin: 0;
@@ -19,41 +19,40 @@
         }
 
         .container {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             z-index: 10;
-            max-width: 90%;
+            max-width: 400px;
         }
 
-        /* Teddy Bear Styling */
         .teddy {
-            font-size: 100px; /* Large teddy */
-            margin-bottom: 20px;
-            display: block;
+            font-size: 80px;
+            margin-bottom: 10px;
         }
 
         h1 {
             color: #d63384;
-            margin-bottom: 30px;
+            font-size: 24px;
+            min-height: 60px;
         }
 
         .buttons {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 25px;
+            font-size: 16px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease-in-out;
         }
 
         #yesBtn {
@@ -66,18 +65,16 @@
             color: white;
         }
 
-        /* Floating Hearts */
         .heart {
             position: absolute;
-            color: rgba(255, 255, 255, 0.6);
-            user-select: none;
+            color: rgba(255, 105, 180, 0.6);
             pointer-events: none;
-            animation: float 6s linear infinite;
+            animation: float 5s linear infinite;
         }
 
         @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(110vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
@@ -87,66 +84,67 @@
 
     <div class="container">
         <div class="teddy">🧸❤️</div>
-        <h1 id="question">Will you be my Valentine?</h1>
-        <div class="buttons">
-            <button id="yesBtn" onclick="celebrate()">Yes</button>
-            <button id="noBtn" onclick="handleNo()">No</button>
+        <h1 id="message">Will you be my valentine, Toots?</h1>
+        <div class="buttons" id="btnGroup">
+            <button id="yesBtn" onclick="accept()">Yes</button>
+            <button id="noBtn" onclick="reject()">No</button>
         </div>
     </div>
 
     <script>
-        let noCount = 0;
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const question = document.getElementById('question');
+        let clickCount = 0;
+        const messages = [
+            "Are you sure?",
+            "Mahal please",
+            "Don't do this to me"
+        ];
 
-        function handleNo() {
-            noCount++;
-            
-            if (noCount <= 5) {
-                // Make Yes bigger
-                let newSize = 18 + (noCount * 40); // Rapid growth
-                yesBtn.style.fontSize = newSize + 'px';
-                yesBtn.style.padding = (15 + noCount * 10) + 'px ' + (30 + noCount * 20) + 'px';
+        function reject() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const msg = document.getElementById('message');
+
+            if (clickCount < messages.length) {
+                // Change text
+                msg.innerText = messages[clickCount];
                 
-                // Make No smaller
-                let noSize = 18 - (noCount * 3);
-                noBtn.style.fontSize = noSize + 'px';
-                noBtn.style.opacity = 1 - (noCount * 0.2);
-            }
-
-            if (noCount >= 5) {
-                noBtn.style.display = 'none'; // No disappears after 5 clicks
+                // Make Yes button bigger
+                let currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+                yesBtn.style.fontSize = (currentSize + 30) + "px";
+                yesBtn.style.padding = (parseInt(yesBtn.style.padding || 12) + 10) + "px " + (parseInt(yesBtn.style.paddingLeft || 25) + 20) + "px";
+                
+                // Optional: Make No button slightly smaller
+                noBtn.style.transform = `scale(${1 - (clickCount * 0.15)})`;
+                
+                clickCount++;
+            } else {
+                // Final stage: No disappears
+                noBtn.style.display = 'none';
             }
         }
 
-        function celebrate() {
-            question.innerText = "Yay! See you on Valentine's! 🥰✨";
-            document.querySelector('.buttons').style.display = 'none';
-            document.querySelector('.teddy').innerText = "👩‍❤️‍👨";
+        function accept() {
+            document.getElementById('message').innerText = "See you on Feb 14! 🥰";
+            document.getElementById('btnGroup').style.display = 'none';
+            document.querySelector('.teddy').innerText = "👩‍❤️‍👨✨";
         }
 
-        // Generate floating hearts (20px and 10px approx sizes)
-        function createHearts() {
+        // Create floating hearts
+        function spawnHearts() {
             const container = document.getElementById('heart-container');
             setInterval(() => {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
                 heart.innerHTML = '❤️';
-                
-                // Randomly choose between ~20px and ~10px
-                const size = Math.random() > 0.5 ? '20px' : '10px';
-                heart.style.fontSize = size;
-                
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
                 container.appendChild(heart);
-
-                setTimeout(() => { heart.remove(); }, 6000);
-            }, 300);
+                setTimeout(() => heart.remove(), 5000);
+            }, 400);
         }
 
-        createHearts();
+        spawnHearts();
     </script>
 </body>
 </html>
