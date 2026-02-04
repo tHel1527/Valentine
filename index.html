@@ -3,60 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Surprise</title>
+<title>Will You Be My Valentine?</title>
 <style>
   body {
     margin: 0;
-    padding: 0;
+    height: 100vh;
     background: pink;
     overflow: hidden;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
   }
 
   h1 {
-    font-size: 25rem; /* giant letters ~25in */
+    font-size: 25rem; /* huge 25-inch-like letters */
     color: red;
     text-align: center;
     margin: 0;
   }
 
-  #teddy-container {
+  #teddy {
     position: relative;
-    width: 300px;
-    margin-top: -100px;
+    width: 200px;
+    margin-top: -50px;
   }
 
-  #teddy {
+  #teddy img {
     width: 100%;
   }
 
-  #teddy-text {
+  #heart-text {
     position: absolute;
-    top: 25%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 1.3rem;
     font-weight: bold;
+    font-size: 1.2rem;
     text-align: center;
   }
 
   #buttons {
-    margin-top: 50px;
+    margin-top: 20px;
     position: relative;
   }
 
   button {
-    padding: 15px 30px;
+    padding: 15px 25px;
     margin: 10px;
     font-size: 1.5rem;
     cursor: pointer;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     transition: all 0.2s ease;
   }
 
@@ -82,8 +82,8 @@
   }
 
   @keyframes floatUp {
-    0% { transform: translateY(100vh) scale(1); opacity: 1; }
-    100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+    0% { transform: translateY(100vh) scale(1); opacity:1; }
+    100% { transform: translateY(-100px) scale(0.5); opacity:0; }
   }
 
   /* Rose explosion */
@@ -105,10 +105,9 @@
 <body>
 
 <h1>💌</h1>
-
-<div id="teddy-container">
-  <img id="teddy" src="https://i.imgur.com/2yVx1xD.png" alt="Teddy Bear with Roses">
-  <div id="teddy-text">Will you be my Valentine, Toots?</div>
+<div id="teddy">
+  <img src="https://i.imgur.com/3v4Zp7b.png" alt="Teddy Bear Holding Heart">
+  <div id="heart-text">Will you be my Valentine, Toots?</div>
 </div>
 
 <div id="buttons">
@@ -117,60 +116,62 @@
 </div>
 
 <script>
-const noBtn = document.getElementById('no');
-const yesBtn = document.getElementById('yes');
-const body = document.body;
+  const noBtn = document.getElementById('no');
+  const yesBtn = document.getElementById('yes');
+  const body = document.body;
 
-// Initialize No button position
-noBtn.style.top = '0px';
-noBtn.style.left = '250px';
+  // Initialize No button position
+  noBtn.style.top = '0px';
+  noBtn.style.left = '200px';
 
-// Floating hearts
-function createHeart() {
-  const heart = document.createElement('div');
-  heart.classList.add('heart');
-  heart.style.left = Math.random() * window.innerWidth + 'px';
-  heart.style.animationDuration = (3 + Math.random() * 3) + 's';
-  body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}
-setInterval(createHeart, 300);
-
-// No button dodge behavior
-noBtn.addEventListener('mouseenter', () => {
-  const yesRect = yesBtn.getBoundingClientRect();
-  let newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-  let newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-
-  // While No overlaps Yes, move and increase Yes size
-  while (
-    newX < yesRect.right && newX + noBtn.offsetWidth > yesRect.left &&
-    newY < yesRect.bottom && newY + noBtn.offsetHeight > yesRect.top
-  ) {
-    newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    // Increase Yes button
-    let scale = parseFloat(yesBtn.style.transform.replace('scale(','').replace(')','')) || 1;
-    yesBtn.style.transform = `scale(${scale + 0.2})`;
+  // Make hearts float
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+    body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
   }
+  setInterval(createHeart, 300);
 
-  noBtn.style.left = newX + 'px';
-  noBtn.style.top = newY + 'px';
-});
+  // Dodge "No" button
+  noBtn.addEventListener('mouseenter', () => {
+    const yesRect = yesBtn.getBoundingClientRect();
+    let newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    let newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
-// Yes click: rose explosion
-yesBtn.addEventListener('click', () => {
-  for(let i=0;i<50;i++){
-    const rose = document.createElement('div');
-    rose.classList.add('rose');
-    rose.style.left = yesBtn.offsetLeft + yesBtn.offsetWidth/2 + 'px';
-    rose.style.top = yesBtn.offsetTop + yesBtn.offsetHeight/2 + 'px';
-    rose.style.setProperty('--x', (Math.random()-0.5)*500 + 'px');
-    rose.style.setProperty('--y', (Math.random()-0.5)*500 + 'px');
-    body.appendChild(rose);
-    setTimeout(() => rose.remove(), 1000);
-  }
-});
+    // Make No disappear if Yes overlaps
+    const yesWidth = yesBtn.offsetWidth;
+    const yesHeight = yesBtn.offsetHeight;
+
+    while (
+      newX < yesRect.right && newX + noBtn.offsetWidth > yesRect.left &&
+      newY < yesRect.bottom && newY + noBtn.offsetHeight > yesRect.top
+    ) {
+      newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      // Also increase Yes size
+      yesBtn.style.transform = `scale(${1 + Math.random() * 1})`;
+    }
+
+    noBtn.style.left = newX + 'px';
+    noBtn.style.top = newY + 'px';
+  });
+
+  // Yes click explosion
+  yesBtn.addEventListener('click', () => {
+    for(let i=0;i<50;i++){
+      const rose = document.createElement('div');
+      rose.classList.add('rose');
+      rose.style.left = yesBtn.offsetLeft + yesBtn.offsetWidth/2 + 'px';
+      rose.style.top = yesBtn.offsetTop + yesBtn.offsetHeight/2 + 'px';
+      rose.style.setProperty('--x', (Math.random()-0.5)*500 + 'px');
+      rose.style.setProperty('--y', (Math.random()-0.5)*500 + 'px');
+      body.appendChild(rose);
+      setTimeout(() => rose.remove(), 1000);
+    }
+  });
 </script>
 
 </body>
