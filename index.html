@@ -1,135 +1,152 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Be My Valentine 💘</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? 💖</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
 
-    .card {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      position: relative;
-      z-index: 2;
-    }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            z-index: 10;
+            max-width: 90%;
+        }
 
-    h1 {
-      color: #ff4d6d;
-      margin-bottom: 25px;
-    }
+        /* Teddy Bear Styling */
+        .teddy {
+            font-size: 100px; /* Large teddy */
+            margin-bottom: 20px;
+            display: block;
+        }
 
-    button {
-      font-size: 18px;
-      padding: 14px 30px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.2s;
-    }
+        h1 {
+            color: #d63384;
+            margin-bottom: 30px;
+        }
 
-    #yesBtn {
-      background-color: #ff4d6d;
-      color: white;
-      margin-right: 10px;
-    }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-    #noBtn {
-      background-color: #ccc;
-      color: #333;
-      position: absolute;
-    }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    /* Floating hearts */
-    .heart {
-      position: absolute;
-      bottom: -20px;
-      font-size: 20px;
-      animation: floatUp 6s linear infinite;
-      opacity: 0.8;
-    }
+        #yesBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(-110vh);
-        opacity: 0;
-      }
-    }
-  </style>
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            user-select: none;
+            pointer-events: none;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Will you be my Valentine? 💖</h1>
-    <button id="yesBtn" onclick="yesClick()">Yes 💘</button>
-    <button id="noBtn" onmouseover="moveNo()">No 💔</button>
-  </div>
+    <div id="heart-container"></div>
 
-  <script>
-    let yesScale = 1;
-    let dodgeCount = 0;
+    <div class="container">
+        <div class="teddy">🧸❤️</div>
+        <h1 id="question">Will you be my Valentine?</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="celebrate()">Yes</button>
+            <button id="noBtn" onclick="handleNo()">No</button>
+        </div>
+    </div>
 
-    function moveNo() {
-      dodgeCount++;
+    <script>
+        let noCount = 0;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const question = document.getElementById('question');
 
-      const noBtn = document.getElementById("noBtn");
-      const yesBtn = document.getElementById("yesBtn");
+        function handleNo() {
+            noCount++;
+            
+            if (noCount <= 5) {
+                // Make Yes bigger
+                let newSize = 18 + (noCount * 40); // Rapid growth
+                yesBtn.style.fontSize = newSize + 'px';
+                yesBtn.style.padding = (15 + noCount * 10) + 'px ' + (30 + noCount * 20) + 'px';
+                
+                // Make No smaller
+                let noSize = 18 - (noCount * 3);
+                noBtn.style.fontSize = noSize + 'px';
+                noBtn.style.opacity = 1 - (noCount * 0.2);
+            }
 
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
+            if (noCount >= 5) {
+                noBtn.style.display = 'none'; // No disappears after 5 clicks
+            }
+        }
 
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+        function celebrate() {
+            question.innerText = "Yay! See you on Valentine's! 🥰✨";
+            document.querySelector('.buttons').style.display = 'none';
+            document.querySelector('.teddy').innerText = "👩‍❤️‍👨";
+        }
 
-      // Make YES bigger
-      yesScale += 0.2;
-      yesBtn.style.transform = `scale(${yesScale})`;
+        // Generate floating hearts (20px and 10px approx sizes)
+        function createHearts() {
+            const container = document.getElementById('heart-container');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                
+                // Randomly choose between ~20px and ~10px
+                const size = Math.random() > 0.5 ? '20px' : '10px';
+                heart.style.fontSize = size;
+                
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(heart);
 
-      // Remove NO after dodging too much
-      if (dodgeCount >= 6) {
-        noBtn.style.display = "none";
-      }
-    }
+                setTimeout(() => { heart.remove(); }, 6000);
+            }, 300);
+        }
 
-    function yesClick() {
-      document.body.innerHTML = `
-        <h1 style="color:#ff4d6d;text-align:center;">
-          YAYYY 💕<br>
-          You’re my Valentine 😍💘
-        </h1>
-      `;
-    }
-
-    // Floating hearts generator
-    setInterval(() => {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerText = ["💖","💘","💕","💞","❤️"][Math.floor(Math.random()*5)];
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 20 + 15 + "px";
-      document.body.appendChild(heart);
-
-      setTimeout(() => {
-        heart.remove();
-      }, 6000);
-    }, 300);
-  </script>
-
+        createHearts();
+    </script>
 </body>
 </html>
